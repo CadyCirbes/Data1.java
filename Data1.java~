@@ -1,0 +1,63 @@
+//A FiniteSet is either:
+// -a Leaf  (which is empty) or
+// -a Tree (which is a constructed FiniteSet containing
+// a left node (type Tree), right node (type Tree), and self value (type int) 
+  
+interface FiniteSet {
+    //size() FiniteSet --> int 
+    //public int size();
+    public int cardinality (FiniteSet t);
+    public boolean isEmptyHuh (FiniteSet t);
+}
+
+
+class Leaf implements FiniteSet{
+    Leaf() { }
+
+    public static FiniteSet empty( ) {
+	return new Leaf(); }
+
+    public int cardinality (FiniteSet t) { return 0; }
+    public boolean isEmptyHuh (FiniteSet t) { return true; }
+}
+
+class Tree implements FiniteSet {
+
+    private FiniteSet left, right;
+    private int value;
+
+    Tree(FiniteSet left, int value, FiniteSet right){
+	this.left = left;
+	this.value = value;
+	this.right = right; }
+
+  public int cardinality (FiniteSet t) { return 0; }
+ 
+  public boolean isEmptyHuh (FiniteSet t) {
+         return false; }
+
+   
+}
+
+class Data1 {
+
+    public static void main (String[] args){
+	
+System.out.println("Hello");
+
+ }
+
+}
+ //construct
+
+//        (empty) -> finite-set
+// (cardinality t) -> integer
+// (isEmptyHuh t) -> boolean
+// (member t elt) -> boolean
+// (add t elt) -> finite-set
+// (remove t elt) -> finite-set
+// (union t u) -> finite-set
+// (inter t u) -> finite-set
+// (diff t u) -> finite-set
+//(equal t u) -> boolean
+//(subset t u) -> boolean
