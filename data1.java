@@ -1,3 +1,5 @@
+import java.util.Random;
+
 //A FiniteSet is either:
 // -a Leaf  (which is empty) or
 // -a Tree (which is a constructed FiniteSet containing
@@ -27,7 +29,7 @@ class Leaf implements FiniteSet{
     // empty() -> FiniteSet
     // does not take in any data parameters
     // returns a new empty set (i.e. a new instance of the Leaf class)
-    public static FiniteSet empty( ) { return new Leaf(); }
+    public static Leaf empty( ) { return new Leaf(); }
 
     // cardinality(FiniteSet) -> int
     // because t contains no elements, the size of t will always be 0
@@ -42,7 +44,7 @@ class Leaf implements FiniteSet{
     public boolean member(int elt) { return false; }
 
     // add(FiniteSet, int) -> FiniteSet
-    // the empty set plus an int returns a new set containing the int as the set's value and two empty sets as left and right   
+    // the empty set plus an int returns a new set containing the int as the set's value and two empty sets as left & right   
     public FiniteSet add(int elt) { return new Tree( this, elt, empty()); }
 
     // remove(FiniteSet, int) -> FiniteSet
@@ -145,7 +147,7 @@ class Tree implements FiniteSet {
     public FiniteSet diff(FiniteSet u) {
 	FiniteSet TreeBranches = left.union(right);
 	//	if (u.member(value)) { 
-	 return TreeBranches.diff(u.remove(value));
+	return TreeBranches.diff(u.remove(value));
 	//} else { return TreeBranches.diff(u); }
     }
 
@@ -169,10 +171,68 @@ class Tree implements FiniteSet {
 public class Data1 {
 
     public static void main(String[] args){
-	System.out.println("Thank goodness this works now");
-	System.out.println("How about this?");
 
-    }
+	//instance of using empty() method to return a new empty set (rather than using the constructor)
+	Leaf emptyBranch = new Leaf();
+	emptyBranch = emptyBranch.empty();
+	Leaf emptyBranch2 = new Leaf();
+
+	//checks whether emptyBranch and emptyBranch2 are empty or not and are they both equal. All results should be true
+	System.out.println ("Are emptyBranch and emptyBranch2 both empty and are they equal to each other? \n All should be TRUE." + "\n Answers: \n Empty? emptyBranch1: " 
+			    + emptyBranch.isEmptyHuh() + "\n emptyBranch2: " + emptyBranch2.isEmptyHuh() + "\n Equal? " + emptyBranch.equal(emptyBranch2));
+
+	Tree branch1 = new Tree(emptyBranch, 1, emptyBranch); 
+	Tree branch7 = new Tree(emptyBranch, 7, emptyBranch);
+	Tree branch3 = new Tree(emptyBranch, 3, emptyBranch);
+	Tree branch5 = new Tree(branch3, 5, branch7);
+
+	//Cardinality Tests: using finite values first to show that the desired value is given, then uses random tests to show 
+	//that it works for any FiniteSet created, not just the ones chosen
+	//checks to see if Leaf.cardinality() runs correctly
+	System.out.println("The size of emptyBranch should be 0: the actual size is " + emptyBranch.cardinality());
+	//Tests Tree.cardinality()
+	System.out.println("The size of branch5 should be 3: the actual size is " + branch5.cardinality());
+	System.out.println("The size of branch5.union(branch1) should be 4: the actual size is " + branch5.union(branch1).cardinality());
+
+	Testing t = new Testing();
+
+	//Checking Random Finite Sets to see if they are equal to each other using their union and intersection
+	System.out.println("out of 100 tests, if the intersection and the union of two sets are equal to one another, then the two sets are equal... here are the results ( . = pass) \n");
+	for ( int i = 0; i < 100; i ++ ) {
+            int size = t.randomInt(0, 5);
+	    int size2 = t.randomInt(0,5);
+            FiniteSet tester = t.randomFiniteSet(0, 5, size);
+	    FiniteSet tester2 = t.randomFiniteSet(0, 5, size2);
+            t.testingEquality( tester, tester2);
+	}}
+
+    static class Testing {
+	    
+	//creates a random FiniteSet of given size with values between min and max, using the add method will 
+	//prevent duplicates from being added (obeying the property of sets
+
+	public FiniteSet randomFiniteSet( int lower, int upper, int size ) {
+	    if (size == 0) { return new Leaf();}
+	    else { return randomFiniteSet(lower, upper, (size - 1)).add(randomInt(lower, upper));}
+	}
+
+	Random rand = new Random();
+
+	public int randomInt( int min, int max ) {
+	    return rand.nextInt((max - min) + 1) + min; }
+
+	public void testingEquality(FiniteSet tester, FiniteSet tester2) {
+	    //if the union of tester and tester2 equals the intersection of tester and tester2, tester must equal tester 2,
+	    //either because the union and intersection are both empty (meaning both sets are empty) or because tester and tester2
+	    //contain the same elements and therefore the intersection is equal to the union  
+	    if ( (tester.union(tester2) == tester.inter(tester2)) == tester.equal(tester2) ) {
+		System.out.println(".");
+	    } else {
+		System.out.println("Fail!");
+	    }
+	}}
 
 }
+
+
 
